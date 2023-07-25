@@ -1,0 +1,6 @@
+name: Home
+version: 1.0
+main: dev.carl.home.Main
+commands:
+  sethome: {}
+  home: {}
