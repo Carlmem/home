@@ -16,7 +16,22 @@ public abstract class AbstractHomeCommand implements CommandExecutor {
     private final Map<UUID, Home> homeMap;
     private final static int TO_MILLISECONDS = 1000;
 
-    public void execute(CommandSender commandSender, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        this.execute(sender, args);
+        return true;
+    }
+
+    protected abstract void commandUse(Player player, Home home);
+
+    protected boolean hasCoolDown(long lastUse) {
+        return lastUse != 0 && coolDown(lastUse) >= 0;
+    }
+
+    protected long secondsLater(long lastUse) {
+        return coolDown(lastUse) / 1000;
+    }
+
+    private void execute(CommandSender commandSender, String[] args) {
         if (!(commandSender instanceof Player player)) {
             return;
         }
@@ -31,21 +46,6 @@ public abstract class AbstractHomeCommand implements CommandExecutor {
         }
 
         commandUse(player, home);
-    }
-
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        this.execute(sender, args);
-        return true;
-    }
-
-    protected abstract void commandUse(Player player, Home home);
-
-    protected boolean hasCoolDown(long lastUse) {
-        return lastUse != 0 && coolDown(lastUse) >= 0;
-    }
-
-    protected long secondsLater(long lastUse) {
-        return coolDown(lastUse) / 1000;
     }
 
     private long coolDown(long lastUse) {
